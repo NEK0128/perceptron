@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 TRAIN_NUM = 100  # 学習データは100個
 LOOP_NUM = 1000  # 収束判定は一切してないけどとりあえず1000回ループ
+INIT_W_VEC = [1, -1]  # 重みベクトルの初期値、適当
 
 
 # 識別関数の本体：y=w'xを計算してるだけ
@@ -34,9 +35,7 @@ def train(train_data, w_vec):
 
 
 if __name__=='__main__':
-    
-    init_w_vec = [1, -1]  # 重みベクトルの初期値、適当
-    
+    ## データ作成
     # 学習データはxy平面の第1象限(first)と第3象限(third)に50個ずつ
     first_1 = np.ones(int(TRAIN_NUM/2)) + 10 * np.random.random(int(TRAIN_NUM/2))
     first_2 = np.ones(int(TRAIN_NUM/2)) + 10 * np.random.random(int(TRAIN_NUM/2))
@@ -56,13 +55,14 @@ if __name__=='__main__':
 
     train_data = np.r_[first_data, third_data]
 
-    w_vec = init_w_vec
-
+    ## 学習
+    w_vec = INIT_W_VEC
     # ループ回数の分だけ繰り返しつつ、重みベクトルを学習させる
     for loop_cnt in range(LOOP_NUM):
         for train_cnt in range(TRAIN_NUM):
             w_vec = train(train_data[train_cnt, :], w_vec)
 
+    ## 描画
     # 分離直線を引く
     x_fig = range(-15,16)
     y_fig = [-(w_vec[1]/w_vec[0])*xi for xi in x_fig]
